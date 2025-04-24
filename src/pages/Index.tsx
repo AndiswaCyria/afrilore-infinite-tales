@@ -5,13 +5,13 @@ import { Button } from "@/components/ui/button";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       <Navigation />
       
       {/* Hero Section */}
       <section className="pt-32 pb-20">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="font-playfair text-4xl md:text-6xl font-bold mb-6 animate-fade-in">
+          <h1 className="font-playfair text-4xl md:text-6xl font-bold mb-6 animate-fade-in text-secondary">
             One Subscription.
             <br />
             <span className="text-primary">Infinite Stories.</span>
@@ -20,7 +20,7 @@ const Index = () => {
             Unlock unlimited access to African literature, folklore, and educational content.
             Start your reading journey today.
           </p>
-          <Button className="bg-primary hover:bg-primary/90 text-lg px-8 py-6 h-auto animate-slide-up">
+          <Button className="bg-primary hover:bg-primary/90 text-white text-lg px-8 py-6 h-auto animate-slide-up">
             Start Your Free Trial
           </Button>
           <p className="text-sm text-secondary mt-4 animate-fade-in">
@@ -33,34 +33,34 @@ const Index = () => {
       <Features />
 
       {/* Pricing Section */}
-      <section className="py-20">
+      <section className="py-20 bg-primary-light/20">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="font-playfair text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="font-playfair text-3xl md:text-4xl font-bold mb-4 text-secondary">
             Simple, Affordable Pricing
           </h2>
           <p className="text-secondary mb-8 max-w-xl mx-auto">
             Access our entire library of books for one low monthly price.
             Cancel anytime.
           </p>
-          <div className="bg-white rounded-lg shadow-lg max-w-md mx-auto p-8">
+          <div className="bg-white rounded-lg shadow-lg max-w-md mx-auto p-8 border border-primary-light">
             <div className="font-playfair text-4xl font-bold text-primary mb-4">
               $9.99<span className="text-lg text-secondary">/month</span>
             </div>
             <ul className="text-left space-y-4 mb-8">
-              <li className="flex items-center gap-2">
-                <span className="text-green-500">✓</span>
+              <li className="flex items-center gap-2 text-secondary">
+                <span className="text-primary">✓</span>
                 Unlimited access to all books
               </li>
-              <li className="flex items-center gap-2">
-                <span className="text-green-500">✓</span>
+              <li className="flex items-center gap-2 text-secondary">
+                <span className="text-primary">✓</span>
                 Offline reading
               </li>
-              <li className="flex items-center gap-2">
-                <span className="text-green-500">✓</span>
+              <li className="flex items-center gap-2 text-secondary">
+                <span className="text-primary">✓</span>
                 New titles added monthly
               </li>
             </ul>
-            <Button className="w-full bg-primary hover:bg-primary/90">
+            <Button className="w-full bg-primary hover:bg-primary/90 text-white">
               Start Free Trial
             </Button>
           </div>
