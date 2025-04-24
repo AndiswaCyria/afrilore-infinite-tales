@@ -23,13 +23,16 @@ export default {
         'playfair': ['Playfair Display', 'serif'],
       },
       colors: {
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "#ada68e",
           light: "#f5f3ec",
         },
         secondary: "#061313",
-        background: "#ffffff",
-        foreground: "#000000",
       },
       animation: {
         "fade-in": "fadeIn 0.5s ease-out forwards",

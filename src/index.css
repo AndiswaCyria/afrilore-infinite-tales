@@ -33,7 +33,7 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border/10;
   }
 
   body {
