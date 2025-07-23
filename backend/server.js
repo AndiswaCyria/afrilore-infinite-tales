@@ -4,6 +4,7 @@ import connectDB from "./db.js";
 import trialRoutes from "./routes/trial.js";
 import cors from "cors";
 import morgan from "morgan";
+import bookRoutes from "./routes/bookRoutes.js";
 
 dotenv.config();
 
@@ -21,7 +22,7 @@ app.use(cors({
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use("/api/books", bookRoutes);
 connectDB();
 // Routes
 app.post("/api/users", (req, res) => {

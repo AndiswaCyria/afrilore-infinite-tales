@@ -1,6 +1,18 @@
 import { BookOpen, Download, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEffect, useState } from "react";
+import { toast } from "@/hooks/use-toast";
+
+interface Book {
+  _id: string;
+  title: string;
+  author: string;
+  description: string;
+  cover: string;
+  downloadUrl: string;
+  readUrl: string;
+}
 
 const freeBooks = [
   {
@@ -8,7 +20,7 @@ const freeBooks = [
     title: "Things Fall Apart",
     author: "Chinua Achebe",
     description: "A masterpiece that has inspired generations of writers in Nigeria, across Africa, and around the world.",
-    cover: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300&h=400&fit=crop&crop=center",
+    cover: "http://litkicks.com/wp-content/uploads/2013/03/tfa2.jpg",
     downloadUrl: "https://www.gutenberg.org/files/2346/2346-h/2346-h.htm",
     readUrl: "https://www.gutenberg.org/files/2346/2346-h/2346-h.htm"
   },
@@ -17,7 +29,7 @@ const freeBooks = [
     title: "The African Child",
     author: "Camara Laye",
     description: "An autobiographical French novel depicting life in Guinea, West Africa.",
-    cover: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=300&h=400&fit=crop&crop=center",
+    cover: "https://i.ebayimg.com/images/g/~c8AAOSwHyxjJUZK/s-l1200.jpg",
     downloadUrl: "https://archive.org/details/africanchild00laye",
     readUrl: "https://archive.org/details/africanchild00laye"
   },
@@ -26,7 +38,7 @@ const freeBooks = [
     title: "Mine Boy",
     author: "Peter Abrahams",
     description: "A novel about the life of a young black man in South Africa during apartheid.",
-    cover: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=400&fit=crop&crop=center",
+    cover: "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1629645697i/43154603.jpg",
     downloadUrl: "https://archive.org/details/mineboy00abra",
     readUrl: "https://archive.org/details/mineboy00abra"
   },
@@ -35,7 +47,7 @@ const freeBooks = [
     title: "The Beautiful Ones Are Not Yet Born",
     author: "Ayi Kwei Armah",
     description: "A novel dealing with political corruption in post-independence Ghana.",
-    cover: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=300&h=400&fit=crop&crop=center",
+    cover: "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1708113800i/264587.jpg",
     downloadUrl: "https://archive.org/details/beautifulonesare00arma",
     readUrl: "https://archive.org/details/beautifulonesare00arma"
   },
@@ -44,7 +56,7 @@ const freeBooks = [
     title: "So Long a Letter",
     author: "Mariama Bâ",
     description: "A semi-autobiographical epistolary novel exploring women's lives in post-colonial Senegal.",
-    cover: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=300&h=400&fit=crop&crop=center",
+    cover: "https://i0.wp.com/africanbookaddict.com/wp-content/uploads/2021/05/img_6124.jpg?fit=900%2C1200&ssl=1",
     downloadUrl: "https://archive.org/details/solongaletter00ba",
     readUrl: "https://archive.org/details/solongaletter00ba"
   },
@@ -53,7 +65,7 @@ const freeBooks = [
     title: "Purple Hibiscus",
     author: "Chimamanda Ngozi Adichie",
     description: "A coming-of-age novel set in postcolonial Nigeria during political instability.",
-    cover: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300&h=400&fit=crop&crop=center",
+    cover: "http://www.cerep.ulg.ac.be/adichie/images/covers/ph_uk_pb.jpg",
     downloadUrl: "https://archive.org/details/purplehibiscus00adic",
     readUrl: "https://archive.org/details/purplehibiscus00adic"
   }
