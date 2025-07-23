@@ -14,14 +14,35 @@ import { toast } from "@/hooks/use-toast";
 const Index = () => {
   const [isTrialOpen, setIsTrialOpen] = useState(false);
 
-  const handleStartTrial = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleStartTrial = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  const name = (document.getElementById('trial-name') as HTMLInputElement).value;
+  const email = (document.getElementById('trial-email') as HTMLInputElement).value;
+  const password = (document.getElementById('trial-password') as HTMLInputElement).value;
+
+  const response = await fetch('http://localhost:5000/api/trial', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, email, password }),
+  });
+
+  const data = await response.json();
+
+  if (response.ok) {
     toast({
       title: "Welcome to Afrilore!",
-      description: "Your free trial has started. Check your email for access details.",
+      description: data.message,
     });
     setIsTrialOpen(false);
-  };
+  } else {
+    toast({
+      title: "Error",
+      description: data.message || "Something went wrong",
+    });
+  }
+};
+
 
   const scrollToPricing = () => {
     const pricingSection = document.getElementById('pricing');

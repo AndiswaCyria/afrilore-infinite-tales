@@ -63,24 +63,24 @@ const Navigation = () => {
         
         {/* Navigation Links */}
         <div className="hidden md:flex items-center gap-6">
-          <button 
+          <Button 
             onClick={() => scrollToSection('about')}
             className="text-foreground hover:text-primary transition-colors"
           >
             About
-          </button>
-          <button 
+          </Button>
+          <Button
             onClick={() => scrollToSection('free-library')}
             className="text-foreground hover:text-primary transition-colors"
           >
             Free Library
-          </button>
-          <button 
+          </Button>
+          <Button
             onClick={() => scrollToSection('contact')}
             className="text-foreground hover:text-primary transition-colors"
           >
             Contact
-          </button>
+          </Button>
         </div>
         <div className="flex items-center gap-4">
           {!isLoggedIn ? (
