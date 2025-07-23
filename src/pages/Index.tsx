@@ -33,7 +33,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      
+
       {/* Hero Section */}
       <section className="pt-32 pb-20">
         <div className="container mx-auto px-4 text-center">
@@ -129,9 +129,9 @@ const Index = () => {
           </div>
         </div>
       </section>
-    </div>
       {/* Contact Us Section */}
       <ContactUs />
+    </div>
   );
 };
 

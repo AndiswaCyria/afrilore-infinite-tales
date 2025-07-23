@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const ContactUs = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -36,13 +37,13 @@ const ContactUs = () => {
     {
       icon: <Phone className="h-6 w-6 text-primary" />,
       title: "Call Us",
-      details: "+27 11 123 4567",
+      details: "+27 64 891 9573",
       description: "Mon-Fri from 8am to 5pm"
     },
     {
       icon: <MapPin className="h-6 w-6 text-primary" />,
       title: "Visit Us",
-      details: "Cape Town, South Africa",
+      details: "17 Melle Street, Johannesburg, South Africa",
       description: "Our headquarters"
     },
     {
@@ -190,11 +191,22 @@ const ContactUs = () => {
             Check out our comprehensive help center or start a live chat with our support team.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-              Visit Help Center
+            <Button
+              asChild
+              variant="outline"
+              className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+            >
+              <Link to="/help-center">
+                Visit Help Center
+              </Link>
             </Button>
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
-              Start Live Chat
+            <Button
+              asChild
+              className="bg-primary hover:bg-primary/90 text-primary-foreground"
+            >
+              <Link to="/live-chat">
+                Start Live Chat
+              </Link>
             </Button>
           </div>
         </div>

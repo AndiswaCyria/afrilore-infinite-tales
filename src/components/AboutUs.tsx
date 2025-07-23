@@ -10,13 +10,13 @@ const AboutUs = () => {
 
   const team = [
     {
-      name: "Dr. Amara Okafor",
+      name: "Ms. Andiswa Cyria Molangathi",
       role: "Founder & CEO",
-      image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=300&h=300&fit=crop&crop=face",
+      image: "public/Andiswa.jpeg",
       bio: "Former literature professor with 15 years of experience in African studies and digital publishing."
     },
     {
-      name: "Kwame Asante",
+      name: "Ray Satsi",
       role: "Head of Content",
       image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face",
       bio: "Published author and curator specializing in contemporary African literature and folklore preservation."
