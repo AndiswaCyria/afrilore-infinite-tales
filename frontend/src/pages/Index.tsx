@@ -13,7 +13,9 @@ import { toast } from "@/hooks/use-toast";
 
 const Index = () => {
   const [isTrialOpen, setIsTrialOpen] = useState(false);
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
+  console.log("Base URL:", baseUrl);
   const handleStartTrial = async (e: React.FormEvent) => {
   e.preventDefault();
 
@@ -21,7 +23,7 @@ const Index = () => {
   const email = (document.getElementById('trial-email') as HTMLInputElement).value;
   const password = (document.getElementById('trial-password') as HTMLInputElement).value;
 
-  const response = await fetch('http://localhost:5000/api/trial', {
+  const response = await fetch(`${baseUrl}/api/users`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name, email, password }),
