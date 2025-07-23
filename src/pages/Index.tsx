@@ -1,6 +1,7 @@
 
 import Navigation from "@/components/Navigation";
 import Features from "@/components/Features";
+import FreeLibrary from "@/components/FreeLibrary";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -13,7 +14,6 @@ const Index = () => {
 
   const handleStartTrial = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement actual trial signup logic
     toast({
       title: "Welcome to Afrilore!",
       description: "Your free trial has started. Check your email for access details.",
@@ -85,6 +85,9 @@ const Index = () => {
       {/* Features Section */}
       <Features />
 
+      {/* Free Library Section */}
+      <FreeLibrary />
+
       {/* Pricing Section */}
       <section id="pricing" className="py-20 bg-muted/20">
         <div className="container mx-auto px-4 text-center">
@@ -97,7 +100,7 @@ const Index = () => {
           </p>
           <div className="bg-card rounded-lg shadow-lg max-w-md mx-auto p-8 border border-border">
             <div className="font-playfair text-4xl font-bold text-primary mb-4">
-              $9.99<span className="text-lg text-muted-foreground">/month</span>
+              R50<span className="text-lg text-muted-foreground">/month</span>
             </div>
             <ul className="text-left space-y-4 mb-8">
               <li className="flex items-center gap-2 text-card-foreground">
@@ -114,7 +117,7 @@ const Index = () => {
               </li>
             </ul>
             <Button 
-              onClick={scrollToPricing}
+              onClick={() => setIsTrialOpen(true)}
               className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
             >
               Start Free Trial
