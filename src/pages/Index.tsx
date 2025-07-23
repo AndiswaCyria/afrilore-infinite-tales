@@ -2,8 +2,32 @@
 import Navigation from "@/components/Navigation";
 import Features from "@/components/Features";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "@/hooks/use-toast";
 
 const Index = () => {
+  const [isTrialOpen, setIsTrialOpen] = useState(false);
+
+  const handleStartTrial = (e: React.FormEvent) => {
+    e.preventDefault();
+    // TODO: Implement actual trial signup logic
+    toast({
+      title: "Welcome to Afrilore!",
+      description: "Your free trial has started. Check your email for access details.",
+    });
+    setIsTrialOpen(false);
+  };
+
+  const scrollToPricing = () => {
+    const pricingSection = document.getElementById('pricing');
+    if (pricingSection) {
+      pricingSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
@@ -20,9 +44,38 @@ const Index = () => {
             Unlock unlimited access to African literature, folklore, and educational content.
             Start your reading journey today.
           </p>
-          <Button className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-6 h-auto animate-slide-up">
-            Start Your Free Trial
-          </Button>
+          <Dialog open={isTrialOpen} onOpenChange={setIsTrialOpen}>
+            <DialogTrigger asChild>
+              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-6 h-auto animate-slide-up">
+                Start Your Free Trial
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Start Your Free Trial</DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleStartTrial} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="trial-email">Email</Label>
+                  <Input id="trial-email" type="email" placeholder="Enter your email" required />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="trial-name">Full Name</Label>
+                  <Input id="trial-name" type="text" placeholder="Enter your full name" required />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="trial-password">Password</Label>
+                  <Input id="trial-password" type="password" placeholder="Create a password" required />
+                </div>
+                <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
+                  Start Free Trial
+                </Button>
+                <p className="text-xs text-muted-foreground text-center">
+                  No credit card required. Cancel anytime.
+                </p>
+              </form>
+            </DialogContent>
+          </Dialog>
           <p className="text-sm text-muted-foreground mt-4 animate-fade-in">
             No credit card required
           </p>
@@ -33,7 +86,7 @@ const Index = () => {
       <Features />
 
       {/* Pricing Section */}
-      <section className="py-20 bg-muted/20">
+      <section id="pricing" className="py-20 bg-muted/20">
         <div className="container mx-auto px-4 text-center">
           <h2 className="font-playfair text-3xl md:text-4xl font-bold mb-4 text-foreground">
             Simple, Affordable Pricing
@@ -60,7 +113,10 @@ const Index = () => {
                 New titles added monthly
               </li>
             </ul>
-            <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
+            <Button 
+              onClick={scrollToPricing}
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+            >
               Start Free Trial
             </Button>
           </div>
