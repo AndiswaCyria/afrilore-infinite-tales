@@ -21,20 +21,20 @@ const features = [
 
 const Features = () => {
   return (
-    <section className="py-20 bg-primary-light/20">
+    <section className="py-20 bg-muted/20">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {features.map((feature, index) => (
             <div
               key={index}
-              className="p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow animate-fade-in border border-primary-light"
+              className="p-6 bg-card rounded-lg shadow-sm hover:shadow-md transition-shadow animate-fade-in border border-border"
               style={{ animationDelay: `${index * 200}ms` }}
             >
               <div className="mb-4">{feature.icon}</div>
-              <h3 className="font-playfair text-xl font-semibold mb-2 text-secondary">
+              <h3 className="font-playfair text-xl font-semibold mb-2 text-card-foreground">
                 {feature.title}
               </h3>
-              <p className="text-secondary">{feature.description}</p>
+              <p className="text-muted-foreground">{feature.description}</p>
             </div>
           ))}
         </div>
