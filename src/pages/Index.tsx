@@ -2,6 +2,8 @@
 import Navigation from "@/components/Navigation";
 import Features from "@/components/Features";
 import FreeLibrary from "@/components/FreeLibrary";
+import AboutUs from "@/components/AboutUs";
+import ContactUs from "@/components/ContactUs";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -88,6 +90,8 @@ const Index = () => {
       {/* Free Library Section */}
       <FreeLibrary />
 
+      {/* About Us Section */}
+      <AboutUs />
       {/* Pricing Section */}
       <section id="pricing" className="py-20 bg-muted/20">
         <div className="container mx-auto px-4 text-center">
@@ -126,6 +130,8 @@ const Index = () => {
         </div>
       </section>
     </div>
+      {/* Contact Us Section */}
+      <ContactUs />
   );
 };
 

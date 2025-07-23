@@ -20,6 +20,12 @@ const Navigation = () => {
     }
   };
 
+  const scrollToSection = (sectionId: string) => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     toast({
@@ -53,6 +59,28 @@ const Navigation = () => {
         <div className="flex items-center gap-2">
           <BookOpen className="h-6 w-6 text-foreground" />
           <span className="font-playfair text-xl font-bold text-foreground">Afrilore</span>
+        </div>
+        
+        {/* Navigation Links */}
+        <div className="hidden md:flex items-center gap-6">
+          <button 
+            onClick={() => scrollToSection('about')}
+            className="text-foreground hover:text-primary transition-colors"
+          >
+            About
+          </button>
+          <button 
+            onClick={() => scrollToSection('free-library')}
+            className="text-foreground hover:text-primary transition-colors"
+          >
+            Free Library
+          </button>
+          <button 
+            onClick={() => scrollToSection('contact')}
+            className="text-foreground hover:text-primary transition-colors"
+          >
+            Contact
+          </button>
         </div>
         <div className="flex items-center gap-4">
           {!isLoggedIn ? (
