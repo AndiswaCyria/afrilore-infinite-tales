@@ -65,7 +65,7 @@ const freeBooks = [
     title: "Purple Hibiscus",
     author: "Chimamanda Ngozi Adichie",
     description: "A coming-of-age novel set in postcolonial Nigeria during political instability.",
-    cover: "http://www.cerep.ulg.ac.be/adichie/images/covers/ph_uk_pb.jpg",
+    cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQfXelCeaKsvM9Tz45sFfpOr5a0ff4GWBdSQ&s",
     downloadUrl: "https://archive.org/details/purplehibiscus00adic",
     readUrl: "https://archive.org/details/purplehibiscus00adic"
   }
