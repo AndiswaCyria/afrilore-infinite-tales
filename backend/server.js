@@ -15,7 +15,7 @@ app.use(morgan("dev"));
 
 
 app.use(cors({
-    origin: ["http://localhost:8080", "https://afrilore-infinite-tales.vercel.app"], 
+    origin: ["http://localhost:8080", "afrilore-infinite-tales.vercel.app"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
 }));
