@@ -14,7 +14,7 @@ const previewBooks = [
     title: "Americanah",
     author: "Chimamanda Ngozi Adichie",
     description: "A powerful story about identity, belonging, and the immigrant experience in America.",
-    cover: "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1484430314i/15796700.jpg",
+    cover: "https://shop.tenement.org/wp-content/uploads/2019/10/americana-741x800.jpg",
     genre: "Contemporary Fiction",
     pages: 477,
     rating: 4.3,
