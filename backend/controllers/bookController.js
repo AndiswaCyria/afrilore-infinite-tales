@@ -35,3 +35,15 @@ export const getBookById = async (req, res) => {
     res.status(500).json({ message: 'Error fetching book' })
   }
 }
+
+// @desc    Get all preview books
+// @route   GET /api/books/preview
+export const getPreviewBooks = async (req, res) => {
+  try {
+    const previewBooks = await Book.find({ isPreview: true })
+    res.json(previewBooks)
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching preview books' })
+  }
+}
+

@@ -1,22 +1,24 @@
 import express from 'express'
-import { getFreeBooks, getAllBooks, getBookById } from '../controllers/bookController.js';
-import Book from '../models/bookModel.js'
+import {
+  getFreeBooks,
+  getAllBooks,
+  getBookById,
+  getPreviewBooks
+} from '../controllers/bookController.js'
 
 const router = express.Router()
 
-// Define routes for book operations
 // GET /api/books/free
-router.get('/free', async (req, res) => {
-  const freeBooks = await getFreeBooks()
-  res.json(freeBooks)
-})       // GET /api/books/free
-router.get('/', async (req, res) => {
-  const books = await getAllBooks()
-  res.json(books)
-})            // GET /api/books
-router.get('/:id', async (req, res) => {
-  const book = await getBookById(req.params.id)
-  res.json(book)
-})         // GET /api/books/:id
+router.get('/free', getFreeBooks)
+
+// GET /api/books/preview
+router.get('/preview', getPreviewBooks)
+
+// GET /api/books
+router.get('/', getAllBooks)
+
+// GET /api/books/:id
+router.get('/:id', getBookById)
 
 export default router
+
