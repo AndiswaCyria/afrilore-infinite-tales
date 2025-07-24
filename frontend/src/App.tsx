@@ -7,11 +7,13 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import HelpCenter from "./pages/HelpCenter";
 import LiveChat from "./pages/LiveChat";
+import { Analytics } from "@vercel/analytics/react"
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
+    <Analytics />
     <TooltipProvider>
       <Toaster />
       <Sonner />
