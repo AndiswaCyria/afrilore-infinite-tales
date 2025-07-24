@@ -12,7 +12,7 @@ const AboutUs = () => {
     {
       name: "Ms. Andiswa Cyria Molangathi",
       role: "Founder & CEO",
-      image: "public/Andiswa.jpeg",
+      image: "/Andiswa.jpeg",
       bio: "Former literature professor with 15 years of experience in African studies and digital publishing."
     },
     {
