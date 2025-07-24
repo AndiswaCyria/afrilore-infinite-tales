@@ -7,7 +7,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import HelpCenter from "./pages/HelpCenter";
 import LiveChat from "./pages/LiveChat";
-import { Analytics } from "@vercel/analytics/react"
+
 
 const queryClient = new QueryClient();
 
@@ -25,7 +25,7 @@ const App = () => (
           <Route path="/live-chat" element={<LiveChat />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-        <Analytics />
+       
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
