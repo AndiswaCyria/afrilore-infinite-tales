@@ -13,7 +13,7 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <Analytics />
+    
     <TooltipProvider>
       <Toaster />
       <Sonner />
@@ -25,6 +25,7 @@ const App = () => (
           <Route path="/live-chat" element={<LiveChat />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <Analytics />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
