@@ -42,7 +42,8 @@ io.on("connection", (socket) => {
 
   socket.on("chatMessage", (message) => {
     console.log("User says:", message);
-    socket.emit("botMessage", "Thanks! A support agent will join shortly.");
+    const reply = generateBotReply("Thanks! A support agent will join shortly."); 
+    socket.emit("botMessage", reply);
   });
 
   socket.on("disconnect", () => {

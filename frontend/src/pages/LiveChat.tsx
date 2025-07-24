@@ -7,7 +7,10 @@ import Navigation from "@/components/Navigation";
 import { toast } from "@/hooks/use-toast";
 import { io } from "socket.io-client";
 
-const socket = io("https://afrilore-infinite-tales.onrender.com"); 
+const socket = io("https://afrilore-infinite-tales.onrender.com", {
+  transports: ["websocket"],
+  withCredentials: true,
+});
 
 const LiveChat = () => {
   const [messages, setMessages] = useState([
