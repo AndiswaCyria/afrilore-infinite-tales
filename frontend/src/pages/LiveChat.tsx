@@ -5,6 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Send } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import { toast } from "@/hooks/use-toast";
+import { io } from "socket.io-client";
+
+const socket = io("https://afrilore-infinite-tales.onrender.com"); 
 
 const LiveChat = () => {
   const [messages, setMessages] = useState([
@@ -15,21 +18,32 @@ const LiveChat = () => {
 
   const handleSend = () => {
     if (!input.trim()) return;
-    setMessages([...messages, { from: "user", text: input }]);
-    setInput("");
 
-    // Simulate bot response
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        { from: "bot", text: "Thanks! A support agent will join shortly." }
-      ]);
-    }, 1000);
+    // Show user's message
+    const newMessage = { from: "user", text: input };
+    setMessages((prev) => [...prev, newMessage]);
+
+    // Send to server
+    socket.emit("chatMessage", input);
+
+    setInput("");
   };
 
   useEffect(() => {
+    // Scroll to bottom on new message
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  useEffect(() => {
+    // Listen for bot/agent responses
+    socket.on("botMessage", (msg: string) => {
+      setMessages((prev) => [...prev, { from: "bot", text: msg }]);
+    });
+
+    return () => {
+      socket.off("botMessage");
+    };
+  }, []);
 
   return (
     <>
@@ -76,3 +90,4 @@ const LiveChat = () => {
 };
 
 export default LiveChat;
+
