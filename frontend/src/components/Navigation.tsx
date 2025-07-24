@@ -63,6 +63,12 @@ const Navigation = () => {
         
         {/* Navigation Links */}
         <div className="hidden md:flex items-center gap-6">
+          <Button
+            onClick={() => scrollToSection('index')}
+            className="text-foreground hover:text-primary transition-colors"
+            >
+              Home
+          </ Button>
           <Button 
             onClick={() => scrollToSection('about')}
             className="text-foreground hover:text-primary transition-colors"
