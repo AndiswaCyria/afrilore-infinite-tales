@@ -2,6 +2,7 @@
 import Navigation from "@/components/Navigation";
 import Features from "@/components/Features";
 import FreeLibrary from "@/components/FreeLibrary";
+import PreviewBooks from "@/components/PreviewBooks";
 import AboutUs from "@/components/AboutUs";
 import ContactUs from "@/components/ContactUs";
 import { Button } from "@/components/ui/button";
@@ -112,6 +113,9 @@ const Index = () => {
 
       {/* Free Library Section */}
       <FreeLibrary />
+
+      {/* Preview Books Section */}
+      <PreviewBooks />
 
       {/* About Us Section */}
       <AboutUs />

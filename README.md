@@ -1,73 +1,194 @@
-# Welcome to your Lovable project
+# Afrilore - One Subscription. Infinite Stories.
 
-## Project info
+A modern digital library platform dedicated to African literature, folklore, and educational content. Built with React, TypeScript, and Node.js.
 
-**URL**: https://lovable.dev/projects/abef4066-d13e-43dd-a812-d1817a0b7a22
+## 🌍 About Afrilore
 
-## How can I edit this code?
+Afrilore is a comprehensive digital library that celebrates and preserves African literature and culture. Our platform provides unlimited access to a curated collection of books, stories, and educational materials from across the African continent.
 
-There are several ways of editing your application.
+### ✨ Features
 
-**Use Lovable**
+- **Free Library**: Access to classic African literature in the public domain
+- **Premium Collection**: Curated selection of contemporary African books with preview functionality
+- **Subscription Model**: Affordable monthly access to the entire premium library
+- **Responsive Design**: Optimized for desktop, tablet, and mobile devices
+- **User Authentication**: Secure login and registration system
+- **Modern UI**: Clean, elegant interface with smooth animations
+- **Mobile-First**: Fully responsive design with mobile navigation
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/abef4066-d13e-43dd-a812-d1817a0b7a22) and start prompting.
+## 🚀 Tech Stack
 
-Changes made via Lovable will be committed automatically to this repo.
+### Frontend
+- **React 18** with TypeScript
+- **Vite** for fast development and building
+- **Tailwind CSS** for styling
+- **shadcn/ui** for UI components
+- **React Router** for navigation
+- **React Query** for data fetching
+- **Lucide React** for icons
 
-**Use your preferred IDE**
+### Backend
+- **Node.js** with Express
+- **MongoDB** with Mongoose
+- **CORS** for cross-origin requests
+- **Morgan** for logging
+- **dotenv** for environment variables
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Database
+- **MongoDB** for data storage
+- **Mongoose** for object modeling
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 📚 Book Collections
 
-Follow these steps:
+### Free Library
+- Things Fall Apart by Chinua Achebe
+- The African Child by Camara Laye
+- Mine Boy by Peter Abrahams
+- The Beautiful Ones Are Not Yet Born by Ayi Kwei Armah
+- So Long a Letter by Mariama Bâ
+- Purple Hibiscus by Chimamanda Ngozi Adichie
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Premium Collection
+- Americanah by Chimamanda Ngozi Adichie
+- Half of a Yellow Sun by Chimamanda Ngozi Adichie
+- The Joys of Motherhood by Buchi Emecheta
+- Nervous Conditions by Tsitsi Dangarembga
+- Disgrace by J.M. Coetzee
+- Waiting for the Barbarians by J.M. Coetzee
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## 🛠️ Installation & Setup
 
-# Step 3: Install the necessary dependencies.
-npm i
+### Prerequisites
+- Node.js (v18 or higher)
+- MongoDB (local or cloud instance)
+- npm or yarn
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+### Backend Setup
+1. Navigate to the backend directory:
+   ```bash
+   cd backend
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Create a `.env` file with the following variables:
+   ```env
+   MONGO_URI=your_mongodb_connection_string
+   PORT=5000
+   ```
+
+4. Start the backend server:
+   ```bash
+   npm start
+   ```
+
+### Frontend Setup
+1. Navigate to the frontend directory:
+   ```bash
+   cd frontend
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Create a `.env` file with:
+   ```env
+   VITE_API_BASE_URL=http://localhost:5000
+   ```
+
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+The application will be available at `http://localhost:8080`
+
+## 📱 Mobile Responsiveness
+
+The application is fully responsive and includes:
+- Mobile-optimized navigation with hamburger menu
+- Touch-friendly interface elements
+- Responsive grid layouts for book collections
+- Optimized typography and spacing for mobile devices
+
+## 🎨 Design Features
+
+- **Modern Aesthetic**: Clean, professional design with careful attention to typography
+- **Color Scheme**: Warm, earthy tones reflecting African heritage
+- **Typography**: Playfair Display for headings, system fonts for body text
+- **Animations**: Smooth transitions and hover effects
+- **Accessibility**: High contrast ratios and keyboard navigation support
+
+## 💳 Subscription Model
+
+- **Free Tier**: Access to public domain books
+- **Premium Tier**: R50/month for unlimited access to the full library
+- **Preview System**: Users can read previews of premium books before subscribing
+- **No Commitment**: Cancel anytime
+
+## 🔐 Security Features
+
+- Secure user authentication
+- Password encryption
+- Protected API routes
+- CORS configuration
+- Input validation and sanitization
+
+## 📊 Project Structure
+
+```
+afrilore/
+├── backend/
+│   ├── controllers/
+│   ├── models/
+│   ├── routes/
+│   ├── data/
+│   └── server.js
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── hooks/
+│   │   └── lib/
+│   └── public/
+└── README.md
 ```
 
-**Edit a file directly in GitHub**
+## 🌟 Key Components
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- **Navigation**: Responsive navigation with mobile menu
+- **Hero Section**: Compelling landing page with call-to-action
+- **Free Library**: Public domain books with direct access
+- **Preview Books**: Premium collection with subscription prompts
+- **About Us**: Company information and team details
+- **Contact**: Support and communication channels
 
-**Use GitHub Codespaces**
+## 🚀 Deployment
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+The application is configured for easy deployment on platforms like:
+- **Frontend**: Vercel, Netlify, or similar
+- **Backend**: Heroku, Railway, or similar
+- **Database**: MongoDB Atlas
 
-## What technologies are used for this project?
+## 🤝 Contributing
 
-This project is built with:
+This project was built by me as a showcase of modern web development practices and African literature appreciation.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 📄 License
 
-## How can I deploy this project?
+This project is for educational and demonstration purposes.
 
-Simply open [Lovable](https://lovable.dev/projects/abef4066-d13e-43dd-a812-d1817a0b7a22) and click on Share -> Publish.
+## 📞 Contact
 
-## Can I connect a custom domain to my Lovable project?
+For questions or support, please visit our contact page or reach out through the live chat feature.
 
-Yes, you can!
+---
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+**Built with ❤️ for African Literature**
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+*Preserving stories, celebrating culture, connecting readers worldwide.*
