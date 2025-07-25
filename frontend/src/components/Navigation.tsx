@@ -99,6 +99,7 @@ const handleRegister = async (e: React.FormEvent) => {
   try {
     await axios.post("https://afrilore-infinite-tales.onrender.com/api/users/register", {
   name,
+  surname,
   email,
   password,
 });
