@@ -107,3 +107,40 @@ In /backend/.env
 PORT=5000
 MONGO_URI=your_mongodb_atlas_connection_string
 ```
+---
+
+### 🧪 Testing
+Manual testing of routes and Socket.io in development
+
+Postman tested backend endpoints
+
+Browser-based UI testing
+
+---
+
+### 📝 Known Issues
+Bot responses in Live Chat can be expanded with AI APIs
+
+Authentication is basic and needs token integration for production
+
+Help Center search is static (consider Algolia/Fuse.js in future)
+
+---
+
+### 📚 Future Improvements
+- Full book streaming with PDF viewer
+
+- Payment gateway for premium subscription
+
+- AI-powered book recommendations
+
+- Admin dashboard for content management
+
+- Email support and user feedback collection
+
+---
+
+### 👩🏽‍💻 Author
+Cyria Molangathi
+📧 [andiswacyriam@gmail.com]
+🌐 https://www.linkedin.com/in/andiswa-cyria-molangathi/
