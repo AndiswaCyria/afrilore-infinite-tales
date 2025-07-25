@@ -97,12 +97,11 @@ const handleRegister = async (e: React.FormEvent) => {
   const password = (document.getElementById("register-password") as HTMLInputElement).value;
 
   try {
-    await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/user/register`, {
-      name,
-      surname,
-      email,
-      password,
-    });
+    await axios.post("https://afrilore-infinite-tales.onrender.com/api/user/register", {
+  name,
+  email,
+  password,
+});
 
     toast({
       title: "Registration Successful!",
