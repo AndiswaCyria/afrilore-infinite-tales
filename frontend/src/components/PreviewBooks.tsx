@@ -2,11 +2,12 @@ import { BookOpen, Lock, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
+import axios from "axios";
 
 const previewBooks = [
   {
@@ -80,14 +81,16 @@ const previewBooks = [
 const PreviewBooks = () => {
   const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
 
-  const handleSubscribe = async (e: React.FormEvent) => {
-    e.preventDefault();
-    toast({
-      title: "Subscription Started!",
-      description: "Welcome to Afrilore Premium! You now have access to all books.",
-    });
-    setIsSubscribeOpen(false);
-  };
+  const [user, setUser] = useState<{ email: string } | null>(null);
+
+useEffect(() => {
+  const storedUser = localStorage.getItem("user");
+  if (storedUser) {
+    setUser(JSON.parse(storedUser));
+  }
+}, []);
+  
+  
 
   const handlePreview = (book: typeof previewBooks[0]) => {
     toast({
@@ -95,6 +98,22 @@ const PreviewBooks = () => {
       description: `Reading preview of "${book.title}" by ${book.author}`,
     });
   };
+
+const handleSubscribe = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  if (!user) {
+    toast({ title: "You must be logged in to subscribe" });
+    return;
+  }
+
+  try {
+    await axios.post("/api/user/subscribe", { email: user.email });
+    toast({ title: "Subscribed successfully" });
+  } catch (err) {
+    toast({ title: "Error", description: "Subscription failed" });
+  }
+};
 
   return (
     <section id="preview-books" className="py-20 bg-muted/10">

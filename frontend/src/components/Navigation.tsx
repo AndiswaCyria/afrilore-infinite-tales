@@ -1,17 +1,26 @@
 
 import { BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
 import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+
+
 
 const Navigation = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+    useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -50,33 +59,77 @@ const Navigation = () => {
       navigate('/', { state: { scrollTo: sectionId } });
     }
   };
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
+
+  const handleLogin = async (e: React.FormEvent) => {
+  e.preventDefault();
+  const email = (document.getElementById("login-email") as HTMLInputElement).value;
+  const password = (document.getElementById("login-password") as HTMLInputElement).value;
+
+  try {
+    const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/user/login`, {
+      email,
+      password,
+    });
+
+    localStorage.setItem("token", res.data.token); // Save token
     toast({
       title: "Login Successful!",
       description: "Welcome back to Afrilore.",
     });
     setIsLoggedIn(true);
     setIsLoginOpen(false);
-  };
+  } catch (err) {
+    toast({
+      title: "Login Failed",
+      description: "Invalid email or password.",
+      variant: "destructive",
+    });
+  }
+};
 
-  const handleRegister = (e: React.FormEvent) => {
-    e.preventDefault();
+
+const handleRegister = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  const name = (document.getElementById("register-name") as HTMLInputElement).value;
+  const surname = (document.getElementById("register-surname") as HTMLInputElement).value;
+  const email = (document.getElementById("register-email") as HTMLInputElement).value;
+  const password = (document.getElementById("register-password") as HTMLInputElement).value;
+
+  try {
+    await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/user/register`, {
+      name,
+      surname,
+      email,
+      password,
+    });
+
     toast({
       title: "Registration Successful!",
-      description: "Welcome to Afrilore! You can now access our free books library.",
+      description: "You can now log in with your credentials.",
     });
-    setIsLoggedIn(true);
-    setIsLoginOpen(false);
-  };
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
+    // Optionally auto login
+    setIsLoginOpen(true);
+  } catch (err) {
     toast({
-      title: "Logged Out",
-      description: "You have been successfully logged out.",
+      title: "Registration Failed",
+      description: "Please check your details.",
+      variant: "destructive",
     });
-  };
+  }
+};
+
+
+const handleLogout = () => {
+  localStorage.removeItem("token");
+  setIsLoggedIn(false);
+  toast({
+    title: "Logged Out",
+    description: "You have been successfully logged out.",
+  });
+};
+
   return (
     <nav className="fixed w-full bg-background/80 backdrop-blur-sm z-50 border-b border-border">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -207,3 +260,5 @@ const Navigation = () => {
 };
 
 export default Navigation;
+
+

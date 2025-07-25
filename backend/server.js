@@ -134,7 +134,7 @@ io.on("connection", (socket) => {
 // ✅ API Routes
 app.use("/api/books", bookRoutes);
 app.use("/api/trial", trialRoutes);
-app.use("/api/user", userRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/chat", chatRoutes);
 
 // ✅ Health check

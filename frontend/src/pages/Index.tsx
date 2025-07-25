@@ -1,4 +1,3 @@
-
 import Navigation from "@/components/Navigation";
 import Features from "@/components/Features";
 import FreeLibrary from "@/components/FreeLibrary";
@@ -6,51 +5,72 @@ import PreviewBooks from "@/components/PreviewBooks";
 import AboutUs from "@/components/AboutUs";
 import ContactUs from "@/components/ContactUs";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useState, useEffect } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
+import axios from "axios";
 
 const Index = () => {
   const [isTrialOpen, setIsTrialOpen] = useState(false);
+  const [user, setUser] = useState<{ email: string } | null>(null);
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-  console.log("Base URL:", baseUrl);
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
   const handleStartTrial = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const name = (document.getElementById('trial-name') as HTMLInputElement).value;
-  const email = (document.getElementById('trial-email') as HTMLInputElement).value;
-  const password = (document.getElementById('trial-password') as HTMLInputElement).value;
+    const name = (document.getElementById("trial-name") as HTMLInputElement).value;
+    const email = (document.getElementById("trial-email") as HTMLInputElement).value;
+    const password = (document.getElementById("trial-password") as HTMLInputElement).value;
 
-  const response = await fetch(`${baseUrl}/api/users`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, email, password }),
-  });
+    try {
+      const response = await fetch(`${baseUrl}/api/user/start-trial`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
+      });
 
-  const data = await response.json();
+      const data = await response.json();
 
-  if (response.ok) {
-    toast({
-      title: "Welcome to Afrilore!",
-      description: data.message,
-    });
-    setIsTrialOpen(false);
-  } else {
-    toast({
-      title: "Error",
-      description: data.message || "Something went wrong",
-    });
-  }
-};
-
+      if (response.ok) {
+        toast({
+          title: "Welcome to Afrilore!",
+          description: data.message || "Trial started successfully",
+        });
+        setIsTrialOpen(false);
+      } else {
+        toast({
+          title: "Error",
+          description: data.message || "Something went wrong",
+        });
+      }
+    } catch (err) {
+      toast({
+        title: "Network Error",
+        description: "Failed to start trial. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
 
   const scrollToPricing = () => {
-    const pricingSection = document.getElementById('pricing');
+    const pricingSection = document.getElementById("pricing");
     if (pricingSection) {
-      pricingSection.scrollIntoView({ behavior: 'smooth' });
+      pricingSection.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -70,6 +90,8 @@ const Index = () => {
             Unlock unlimited access to African literature, folklore, and educational content.
             Start your reading journey today.
           </p>
+
+          {/* Start Trial Dialog */}
           <Dialog open={isTrialOpen} onOpenChange={setIsTrialOpen}>
             <DialogTrigger asChild>
               <Button className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-6 h-auto animate-slide-up">
@@ -91,9 +113,17 @@ const Index = () => {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="trial-password">Password</Label>
-                  <Input id="trial-password" type="password" placeholder="Create a password" required />
+                  <Input
+                    id="trial-password"
+                    type="password"
+                    placeholder="Create a password"
+                    required
+                  />
                 </div>
-                <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
+                <Button
+                  type="submit"
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+                >
                   Start Free Trial
                 </Button>
                 <p className="text-xs text-muted-foreground text-center">
@@ -102,6 +132,7 @@ const Index = () => {
               </form>
             </DialogContent>
           </Dialog>
+
           <p className="text-sm text-muted-foreground mt-4 animate-fade-in">
             No credit card required
           </p>
@@ -119,6 +150,7 @@ const Index = () => {
 
       {/* About Us Section */}
       <AboutUs />
+
       {/* Pricing Section */}
       <section id="pricing" className="py-20 bg-muted/20">
         <div className="container mx-auto px-4 text-center">
@@ -126,8 +158,7 @@ const Index = () => {
             Simple, Affordable Pricing
           </h2>
           <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-            Access our entire library of books for one low monthly price.
-            Cancel anytime.
+            Access our entire library of books for one low monthly price. Cancel anytime.
           </p>
           <div className="bg-card rounded-lg shadow-lg max-w-md mx-auto p-8 border border-border">
             <div className="font-playfair text-4xl font-bold text-primary mb-4">
@@ -135,19 +166,16 @@ const Index = () => {
             </div>
             <ul className="text-left space-y-4 mb-8">
               <li className="flex items-center gap-2 text-card-foreground">
-                <span className="text-primary">✓</span>
-                Unlimited access to all books
+                <span className="text-primary">✓</span> Unlimited access to all books
               </li>
               <li className="flex items-center gap-2 text-card-foreground">
-                <span className="text-primary">✓</span>
-                Offline reading
+                <span className="text-primary">✓</span> Offline reading
               </li>
               <li className="flex items-center gap-2 text-card-foreground">
-                <span className="text-primary">✓</span>
-                New titles added monthly
+                <span className="text-primary">✓</span> New titles added monthly
               </li>
             </ul>
-            <Button 
+            <Button
               onClick={() => setIsTrialOpen(true)}
               className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
             >
@@ -156,6 +184,7 @@ const Index = () => {
           </div>
         </div>
       </section>
+
       {/* Contact Us Section */}
       <ContactUs />
     </div>
@@ -163,3 +192,4 @@ const Index = () => {
 };
 
 export default Index;
+
