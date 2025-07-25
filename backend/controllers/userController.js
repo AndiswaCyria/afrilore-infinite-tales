@@ -11,9 +11,14 @@ const generateToken = (userId) => {
 // @desc Register user
 export const registerUser = async (req, res) => {
   const { name, surname, email, password } = req.body;
+   if (!name || !surname || !email || !password) {
+  return res.status(400).json({ error: "Please fill in all fields." });
+}
 
   const userExists = await User.findOne({ email });
   if (userExists) return res.status(400).json({ error: "User already exists" });
+ 
+
 
   const user = await User.create({ name, surname, email, password });
   const token = generateToken(user._id);

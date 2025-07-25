@@ -96,13 +96,16 @@ const handleRegister = async (e: React.FormEvent) => {
   const email = (document.getElementById("register-email") as HTMLInputElement).value;
   const password = (document.getElementById("register-password") as HTMLInputElement).value;
 
+ 
+
   try {
     await axios.post("https://afrilore-infinite-tales.onrender.com/api/users/register", {
   name,
   surname,
   email,
   password,
-});
+ }
+);
 
     toast({
       title: "Registration Successful!",
@@ -111,7 +114,7 @@ const handleRegister = async (e: React.FormEvent) => {
 
     // Optionally auto login
     setIsLoginOpen(true);
-  } catch (err) {
+  } catch (err: any) {
     toast({
       title: "Registration Failed",
       description: "Please check your details.",
