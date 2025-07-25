@@ -18,6 +18,7 @@ const LiveChat = () => {
     const fetchMessages = async () => {
       try {
         const res = await axios.get("/api/chat");
+      
         setMessages(res.data); // Set messages from DB
       } catch (err) {
         toast({
