@@ -53,19 +53,20 @@ app.use(
 
 
 // ✅ Helper function for bot replies
-function generateBotReplies() {
-  return [
-    {
-      text: "Hi! Thank you for reaching out. How can we help you today?",
-      from: "Bot",
-      timestamp: new Date()
-    },
-    {
-      text: "Thanks! A support agent will join shortly.",
-      from: "Bot",
-      timestamp: new Date()
-    }
-  ];
+function getGreetingMessage() {
+  return {
+    text: "Hi! Thank you for reaching out. How can we help you today?",
+    from: "Bot",
+    timestamp: new Date()
+  };
+}
+
+function getFollowUpMessage() {
+  return {
+    text: "Thanks! A support agent will join shortly.",
+    from: "Bot",
+    timestamp: new Date()
+  };
 }
 
 // ✅ Socket.io logic
@@ -89,26 +90,36 @@ io.on("connection", (socket) => {
         from: userMessage.from
       });
 
-      // Generate bot replies
-      const botReplies = generateBotReplies();
+      // Check if this is the first user message for this socket
+      const previousMessages = await ChatMessage.find({ 
+        socketId: socket.id,
+        from: "User"
+      }).countDocuments();
 
-      for (let reply of botReplies) {
-        const botMessage = new ChatMessage({
-          text: reply.text,
-          from: reply.from,
-          socketId: socket.id,
-          timestamp: reply.timestamp
-        });
-
-        await botMessage.save();
-
-        // Emit bot message back to client
-        socket.emit("botMessage", {
-          text: botMessage.text,
-          timestamp: botMessage.timestamp,
-          from: botMessage.from
-        });
+      let botReply;
+      if (previousMessages === 1) {
+        // First message - send greeting
+        botReply = getGreetingMessage();
+      } else {
+        // Subsequent messages - send follow-up
+        botReply = getFollowUpMessage();
       }
+
+      const botMessage = new ChatMessage({
+        text: botReply.text,
+        from: botReply.from,
+        socketId: socket.id,
+        timestamp: botReply.timestamp
+      });
+
+      await botMessage.save();
+
+      // Emit bot message back to client
+      socket.emit("botMessage", {
+        text: botMessage.text,
+        timestamp: botMessage.timestamp,
+        from: botMessage.from
+      });
 
     } catch (error) {
       console.error("❌ Error handling chat message:", error.message);
