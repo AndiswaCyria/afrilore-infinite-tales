@@ -66,7 +66,7 @@ const Navigation = () => {
   const password = (document.getElementById("login-password") as HTMLInputElement).value;
 
   try {
-    const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/user/login`, {
+    const res = await axios.post("https://afrilore-infinite-tales.onrender.com/api/users/login", {
       email,
       password,
     });
@@ -97,7 +97,7 @@ const handleRegister = async (e: React.FormEvent) => {
   const password = (document.getElementById("register-password") as HTMLInputElement).value;
 
   try {
-    await axios.post("https://afrilore-infinite-tales.onrender.com/api/user/register", {
+    await axios.post("https://afrilore-infinite-tales.onrender.com/api/users/register", {
   name,
   email,
   password,
