@@ -5,31 +5,50 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Send } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import { toast } from "@/hooks/use-toast";
-import { io } from "socket.io-client";
-import axios from "axios";
+import { io, Socket } from "socket.io-client";
 
 const LiveChat = () => {
   const [messages, setMessages] = useState<{ from: string; text: string }[]>([]);
   const [input, setInput] = useState("");
+  const [socket, setSocket] = useState<Socket | null>(null);
+  const [isConnected, setIsConnected] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Fetch stored messages on load
+  // Connect to socket and fetch messages
   useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        const res = await axios.get("/api/chat");
-      
-        setMessages(res.data); // Set messages from DB
-      } catch (err) {
+    const newSocket = io("https://afrilore-infinite-tales.onrender.com");
+    
+    newSocket.on("connect", () => {
+      setIsConnected(true);
+      toast({
+        title: "Connected",
+        description: "Connected to chat server",
+      });
+    });
+
+    newSocket.on("disconnect", () => {
+      setIsConnected(false);
+    });
+
+    newSocket.on("chatMessage", (message: { from: string; text: string }) => {
+      setMessages((prev) => [...prev, message]);
+    });
+
+    setSocket(newSocket);
+
+    // Fetch initial messages
+    fetch("https://afrilore-infinite-tales.onrender.com/api/chat")
+      .then(res => res.json())
+      .then(data => setMessages(data))
+      .catch(() => {
         toast({
           title: "Error loading chat",
           description: "Could not load chat history.",
           variant: "destructive",
         });
-      }
-    };
+      });
 
-    fetchMessages();
+    return () => newSocket.close();
   }, []);
 
   // Scroll to bottom when messages update
@@ -38,32 +57,14 @@ const LiveChat = () => {
   }, [messages]);
 
   // Send message
-  const handleSend = async () => {
-    if (!input.trim()) return;
+  const handleSend = () => {
+    if (!input.trim() || !socket || !isConnected) return;
 
     const newMessage = { from: "user", text: input };
-    setMessages((prev) => [...prev, newMessage]);
+    
+    // Emit message through socket
+    socket.emit("chatMessage", newMessage);
     setInput("");
-
-    try {
-      await axios.post("/api/chat", newMessage);
-
-      const botReply = {
-        from: "bot",
-        text: "Thanks! A support agent will join shortly.",
-      };
-
-      setTimeout(async () => {
-        setMessages((prev) => [...prev, botReply]);
-        await axios.post("/api/chat", botReply);
-      }, 1000);
-    } catch (err) {
-      toast({
-        title: "Message failed",
-        description: "Could not send message.",
-        variant: "destructive",
-      });
-    }
   };
 
   return (
