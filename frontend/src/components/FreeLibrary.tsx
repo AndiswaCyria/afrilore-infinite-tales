@@ -20,7 +20,7 @@ const freeBooks = [
     title: "Things Fall Apart",
     author: "Chinua Achebe",
     description: "A masterpiece that has inspired generations of writers in Nigeria, across Africa, and around the world.",
-    cover: "http://litkicks.com/wp-content/uploads/2013/03/tfa2.jpg",
+    cover: "https://litkicks.com/wp-content/uploads/2013/03/tfa2.jpg",
     downloadUrl: "https://marul.ffst.hr/~bwillems/fymob/things.pdf",
     readUrl: "https://marul.ffst.hr/~bwillems/fymob/things.pdf"
   },

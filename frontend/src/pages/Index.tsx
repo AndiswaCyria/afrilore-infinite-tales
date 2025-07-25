@@ -16,12 +16,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
-import axios from "axios";
+import api from "@/lib/api"; 
+
+
 
 const Index = () => {
   const [isTrialOpen, setIsTrialOpen] = useState(false);
   const [user, setUser] = useState<{ email: string } | null>(null);
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  const [trialName, setTrialName] = useState("");
+  const [trialEmail, setTrialEmail] = useState(""); 
+  const [trialPassword, setTrialPassword] = useState("");
+
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -31,41 +37,34 @@ const Index = () => {
   }, []);
 
   const handleStartTrial = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const name = (document.getElementById("trial-name") as HTMLInputElement).value;
-    const email = (document.getElementById("trial-email") as HTMLInputElement).value;
-    const password = (document.getElementById("trial-password") as HTMLInputElement).value;
+  try {
+    const response = await api.post("/users/start-trial", {
+      name: trialName,
+      email: trialEmail,
+      password: trialPassword,
+    });
 
-    try {
-      const response = await fetch(`${baseUrl}/api/user/start-trial`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
-      });
+    const data = response.data;
 
-      const data = await response.json();
+    toast({
+      title: "Welcome to Afrilore!",
+      description: data.message || "Trial started successfully",
+    });
 
-      if (response.ok) {
-        toast({
-          title: "Welcome to Afrilore!",
-          description: data.message || "Trial started successfully",
-        });
-        setIsTrialOpen(false);
-      } else {
-        toast({
-          title: "Error",
-          description: data.message || "Something went wrong",
-        });
-      }
-    } catch (err) {
-      toast({
-        title: "Network Error",
-        description: "Failed to start trial. Please try again.",
-        variant: "destructive",
-      });
-    }
-  };
+    localStorage.setItem("user", JSON.stringify({ email: trialEmail }));
+    setUser({ email: trialEmail });
+    setIsTrialOpen(false);
+  } catch (err: any) {
+    toast({
+      title: "Error",
+      description: err.response?.data?.message || "Something went wrong",
+      variant: "destructive",
+    });
+  }
+};
+
 
   const scrollToPricing = () => {
     const pricingSection = document.getElementById("pricing");
@@ -105,20 +104,37 @@ const Index = () => {
               <form onSubmit={handleStartTrial} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="trial-email">Email</Label>
-                  <Input id="trial-email" type="email" placeholder="Enter your email" required />
+                  <Input
+                      id="trial-email"
+                      type="text"
+                      placeholder="Enter your email"
+                      required
+                      value={trialEmail}
+                      onChange={(e) => setTrialEmail(e.target.value)}
+                    />
+
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="trial-name">Full Name</Label>
-                  <Input id="trial-name" type="text" placeholder="Enter your full name" required />
+                  <Input
+                      id="trial-name"
+                      type="text"
+                      placeholder="Enter your full name"
+                      required
+                      value={trialName}
+                      onChange={(e) => setTrialName(e.target.value)}
+                    />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="trial-password">Password</Label>
                   <Input
-                    id="trial-password"
-                    type="password"
-                    placeholder="Create a password"
-                    required
-                  />
+                      id="trial-password"
+                      type="text"
+                      placeholder="Enter your password"
+                      required
+                      value={trialPassword}
+                      onChange={(e) => setTrialPassword(e.target.value)}
+                    />
                 </div>
                 <Button
                   type="submit"
