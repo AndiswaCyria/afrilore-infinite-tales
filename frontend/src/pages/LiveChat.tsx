@@ -30,7 +30,12 @@ const LiveChat = () => {
       setIsConnected(false);
     });
 
-    newSocket.on("chatMessage", (message: { from: string; text: string }) => {
+    // Listen for user and bot messages from backend
+    newSocket.on("userMessage", (message: { from: string; text: string }) => {
+      setMessages((prev) => [...prev, message]);
+    });
+
+    newSocket.on("botMessage", (message: { from: string; text: string }) => {
       setMessages((prev) => [...prev, message]);
     });
 
@@ -60,10 +65,8 @@ const LiveChat = () => {
   const handleSend = () => {
     if (!input.trim() || !socket || !isConnected) return;
 
-    const newMessage = { from: "user", text: input };
-    
-    // Emit message through socket
-    socket.emit("chatMessage", newMessage);
+    // Emit just the text as backend expects
+    socket.emit("chatMessage", input);
     setInput("");
   };
 
