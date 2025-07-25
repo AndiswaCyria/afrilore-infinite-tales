@@ -6,31 +6,64 @@ import { Send } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import { toast } from "@/hooks/use-toast";
 import { io } from "socket.io-client";
+import axios from "axios";
 
 const LiveChat = () => {
-  const [messages, setMessages] = useState([
-    { from: "bot", text: "Hi there! How can we help you today?" }
-  ]);
+  const [messages, setMessages] = useState<{ from: string; text: string }[]>([]);
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const handleSend = () => {
-    if (!input.trim()) return;
-    setMessages([...messages, { from: "user", text: input }]);
-    setInput("");
+  // Fetch stored messages on load
+  useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        const res = await axios.get("/api/chat");
+        setMessages(res.data); // Set messages from DB
+      } catch (err) {
+        toast({
+          title: "Error loading chat",
+          description: "Could not load chat history.",
+          variant: "destructive",
+        });
+      }
+    };
 
-    // Simulate bot response
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        { from: "bot", text: "Thanks! A support agent will join shortly." }
-      ]);
-    }, 1000);
-  };
+    fetchMessages();
+  }, []);
 
+  // Scroll to bottom when messages update
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Send message
+  const handleSend = async () => {
+    if (!input.trim()) return;
+
+    const newMessage = { from: "user", text: input };
+    setMessages((prev) => [...prev, newMessage]);
+    setInput("");
+
+    try {
+      await axios.post("/api/chat", newMessage);
+
+      const botReply = {
+        from: "bot",
+        text: "Thanks! A support agent will join shortly.",
+      };
+
+      setTimeout(async () => {
+        setMessages((prev) => [...prev, botReply]);
+        await axios.post("/api/chat", botReply);
+      }, 1000);
+    } catch (err) {
+      toast({
+        title: "Message failed",
+        description: "Could not send message.",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <>
@@ -77,4 +110,6 @@ const LiveChat = () => {
 };
 
 export default LiveChat;
+
+
 
