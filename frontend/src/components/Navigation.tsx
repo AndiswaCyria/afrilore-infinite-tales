@@ -7,23 +7,47 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Navigation = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const handleStartReading = () => {
-    // Scroll to pricing section
-    const pricingSection = document.getElementById('pricing');
-    if (pricingSection) {
-      pricingSection.scrollIntoView({ behavior: 'smooth' });
+    if (location.pathname === '/' || location.pathname === '/index') {
+      // Scroll to pricing section on index page
+      const pricingSection = document.getElementById('pricing');
+      if (pricingSection) {
+        pricingSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      // Navigate to index page from other pages
+      navigate('/');
     }
   };
 
-  const scrollToSection = (sectionId: string) => {
-    const section = document.getElementById(sectionId);
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth' });
+  const handleHomeClick = () => {
+    if (location.pathname === '/' || location.pathname === '/index') {
+      // Scroll to top on index page
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      // Navigate to index page from other pages
+      navigate('/');
+    }
+  };
+
+  const handleNavigationClick = (sectionId: string) => {
+    if (location.pathname === '/' || location.pathname === '/index') {
+      // Scroll to section on index page
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      // Navigate to index page and then scroll (handled by navigate)
+      navigate('/', { state: { scrollTo: sectionId } });
     }
   };
   const handleLogin = (e: React.FormEvent) => {
@@ -64,25 +88,29 @@ const Navigation = () => {
         {/* Navigation Links */}
         <div className="hidden md:flex items-center gap-6">
           <Button
-            onClick={() => scrollToSection('index')}
+            onClick={handleHomeClick}
+            variant="ghost"
             className="text-foreground hover:text-primary transition-colors"
-            >
-              Home
-          </ Button>
+          >
+            Home
+          </Button>
           <Button 
-            onClick={() => scrollToSection('about')}
+            onClick={() => handleNavigationClick('about')}
+            variant="ghost"
             className="text-foreground hover:text-primary transition-colors"
           >
             About
           </Button>
           <Button
-            onClick={() => scrollToSection('free-library')}
+            onClick={() => handleNavigationClick('free-library')}
+            variant="ghost"
             className="text-foreground hover:text-primary transition-colors"
           >
             Free Library
           </Button>
           <Button
-            onClick={() => scrollToSection('contact')}
+            onClick={() => handleNavigationClick('contact')}
+            variant="ghost"
             className="text-foreground hover:text-primary transition-colors"
           >
             Contact
@@ -151,12 +179,7 @@ const Navigation = () => {
           ) : (
             <div className="flex items-center gap-4">
               <Button 
-                onClick={() => {
-                  const librarySection = document.getElementById('free-library');
-                  if (librarySection) {
-                    librarySection.scrollIntoView({ behavior: 'smooth' });
-                  }
-                }}
+                onClick={() => handleNavigationClick('free-library')}
                 variant="ghost" 
                 className="text-foreground hover:text-primary"
               >
