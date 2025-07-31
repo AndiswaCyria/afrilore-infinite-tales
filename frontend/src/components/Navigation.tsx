@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "@/lib/api";
 
 
 
@@ -66,7 +66,7 @@ const Navigation = () => {
   const password = (document.getElementById("login-password") as HTMLInputElement).value;
 
   try {
-    const res = await axios.post("https://afrilore-infinite-tales.onrender.com/api/users/login", {
+    const res = await api.post("/users/login", {
       email,
       password,
     });
@@ -78,10 +78,11 @@ const Navigation = () => {
     });
     setIsLoggedIn(true);
     setIsLoginOpen(false);
-  } catch (err) {
+  } catch (err: any) {
+    const errorMessage = err.response?.data?.error || "Invalid email or password.";
     toast({
       title: "Login Failed",
-      description: "Invalid email or password.",
+      description: errorMessage,
       variant: "destructive",
     });
   }
@@ -99,13 +100,12 @@ const handleRegister = async (e: React.FormEvent) => {
  
 
   try {
-    await axios.post("https://afrilore-infinite-tales.onrender.com/api/users/register", {
-  name,
-  surname,
-  email,
-  password,
- }
-);
+    await api.post("/users/register", {
+      name,
+      surname,
+      email,
+      password,
+    });
 
     toast({
       title: "Registration Successful!",
@@ -115,9 +115,10 @@ const handleRegister = async (e: React.FormEvent) => {
     // Optionally auto login
     setIsLoginOpen(true);
   } catch (err: any) {
+    const errorMessage = err.response?.data?.error || "Please check your details.";
     toast({
       title: "Registration Failed",
-      description: "Please check your details.",
+      description: errorMessage,
       variant: "destructive",
     });
   }
