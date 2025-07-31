@@ -70,8 +70,11 @@ export const loginUser = async (req, res) => {
 
 // @route GET /api/user/me
 export const getMe = async (req, res) => {
-  res.json(req.user); // user is added by authMiddleware
+  const user = await User.findById(req.user.id).select("-password");
+  if (!user) return res.status(404).json({ error: "User not found" });
+  res.json(user);
 };
+
 
 //@route Start trial
 export const startTrial = async (req, res) => {
