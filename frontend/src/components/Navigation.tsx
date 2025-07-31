@@ -9,12 +9,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import api from "@/lib/api";
+import { useState } from "react";
 
 
 
 const Navigation = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  
     useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -62,45 +65,91 @@ const Navigation = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
   e.preventDefault();
+  setIsLoading(true);
+  
   const email = (document.getElementById("login-email") as HTMLInputElement).value;
   const password = (document.getElementById("login-password") as HTMLInputElement).value;
 
+  if (!email || !password) {
+    toast({
+      title: "Validation Error",
+      description: "Please fill in all fields.",
+      variant: "destructive",
+    });
+    setIsLoading(false);
+    return;
+  }
   try {
     const res = await api.post("/users/login", {
       email,
       password,
     });
 
-    localStorage.setItem("token", res.data.token); // Save token
+    if (res.data.token) {
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify({
+        id: res.data._id,
+        name: res.data.name,
+        surname: res.data.surname,
+        email: res.data.email
+      }));
+    }
+    
     toast({
       title: "Login Successful!",
       description: "Welcome back to Afrilore.",
     });
+    
     setIsLoggedIn(true);
     setIsLoginOpen(false);
+    
+    // Reset form
+    (e.target as HTMLFormElement).reset();
   } catch (err: any) {
-    const errorMessage = err.response?.data?.error || "Invalid email or password.";
+    console.error("Login error:", err);
+    const errorMessage = err.response?.data?.error || err.response?.data?.message || "Invalid email or password.";
     toast({
       title: "Login Failed",
       description: errorMessage,
       variant: "destructive",
     });
+  } finally {
+    setIsLoading(false);
   }
 };
 
 
 const handleRegister = async (e: React.FormEvent) => {
   e.preventDefault();
+  setIsLoading(true);
 
   const name = (document.getElementById("register-name") as HTMLInputElement).value;
   const surname = (document.getElementById("register-surname") as HTMLInputElement).value;
   const email = (document.getElementById("register-email") as HTMLInputElement).value;
   const password = (document.getElementById("register-password") as HTMLInputElement).value;
 
- 
+  if (!name || !surname || !email || !password) {
+    toast({
+      title: "Validation Error",
+      description: "Please fill in all fields.",
+      variant: "destructive",
+    });
+    setIsLoading(false);
+    return;
+  }
+
+  if (password.length < 6) {
+    toast({
+      title: "Validation Error",
+      description: "Password must be at least 6 characters long.",
+      variant: "destructive",
+    });
+    setIsLoading(false);
+    return;
+  }
 
   try {
-    await api.post("/users/register", {
+    const res = await api.post("/users/register", {
       name,
       surname,
       email,
@@ -109,24 +158,41 @@ const handleRegister = async (e: React.FormEvent) => {
 
     toast({
       title: "Registration Successful!",
-      description: "You can now log in with your credentials.",
+      description: "Welcome to Afrilore! You are now logged in.",
     });
 
-    // Optionally auto login
-    setIsLoginOpen(true);
+    // Auto login after successful registration
+    if (res.data.token) {
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify({
+        id: res.data._id,
+        name: res.data.name,
+        surname: res.data.surname,
+        email: res.data.email
+      }));
+      setIsLoggedIn(true);
+      setIsLoginOpen(false);
+    }
+    
+    // Reset form
+    (e.target as HTMLFormElement).reset();
   } catch (err: any) {
-    const errorMessage = err.response?.data?.error || "Please check your details.";
+    console.error("Registration error:", err);
+    const errorMessage = err.response?.data?.error || err.response?.data?.message || "Registration failed. Please check your details.";
     toast({
       title: "Registration Failed",
       description: errorMessage,
       variant: "destructive",
     });
+  } finally {
+    setIsLoading(false);
   }
 };
 
 
 const handleLogout = () => {
   localStorage.removeItem("token");
+  localStorage.removeItem("user");
   setIsLoggedIn(false);
   toast({
     title: "Logged Out",
@@ -200,8 +266,12 @@ const handleLogout = () => {
                         <Label htmlFor="login-password">Password</Label>
                         <Input id="login-password" type="password" placeholder="Enter your password" required />
                       </div>
-                      <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-                        Login
+                      <Button 
+                        type="submit" 
+                        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+                        disabled={isLoading}
+                      >
+                        {isLoading ? "Logging in..." : "Login"}
                       </Button>
                     </form>
                   </TabsContent>
@@ -222,11 +292,15 @@ const handleLogout = () => {
                         <Input id="register-email" type="email" placeholder="Enter your email" required />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="register-password">Create New Password</Label>
-                        <Input id="register-password" type="password" placeholder="Create a password" required />
+                        <Label htmlFor="register-password">Create Password (min 6 characters)</Label>
+                        <Input id="register-password" type="password" placeholder="Create a password" required minLength={6} />
                       </div>
-                      <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-                        Register
+                      <Button 
+                        type="submit" 
+                        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+                        disabled={isLoading}
+                      >
+                        {isLoading ? "Creating Account..." : "Register"}
                       </Button>
                     </form>
                   </TabsContent>

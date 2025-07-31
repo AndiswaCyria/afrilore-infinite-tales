@@ -38,28 +38,63 @@ const Index = () => {
 
   const handleStartTrial = async (e: React.FormEvent) => {
   e.preventDefault();
+  
+  if (!trialName || !trialEmail || !trialPassword) {
+    toast({
+      title: "Validation Error",
+      description: "Please fill in all fields.",
+      variant: "destructive",
+    });
+    return;
+  }
+
+  if (trialPassword.length < 6) {
+    toast({
+      title: "Validation Error", 
+      description: "Password must be at least 6 characters long.",
+      variant: "destructive",
+    });
+    return;
+  }
 
   try {
-    const response = await api.post("/users/start-trial", {
+    const response = await api.post("/users/register", {
       name: trialName,
+      surname: "Trial User", // Default surname for trial users
       email: trialEmail,
       password: trialPassword,
     });
 
     const data = response.data;
+    
+    // Store user data and token
+    if (data.token) {
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify({
+        id: data._id,
+        name: data.name,
+        surname: data.surname,
+        email: data.email
+      }));
+    }
 
     toast({
       title: "Welcome to Afrilore!",
-      description: data.message || "Trial started successfully",
+      description: "Your account has been created successfully!",
     });
 
-    localStorage.setItem("user", JSON.stringify({ email: trialEmail }));
     setUser({ email: trialEmail });
     setIsTrialOpen(false);
+    
+    // Reset form
+    setTrialName("");
+    setTrialEmail("");
+    setTrialPassword("");
   } catch (err: any) {
+    console.error("Trial registration error:", err);
     toast({
       title: "Error",
-      description: err.response?.data?.message || "Something went wrong",
+      description: err.response?.data?.error || err.response?.data?.message || "Something went wrong. Please try again.",
       variant: "destructive",
     });
   }
