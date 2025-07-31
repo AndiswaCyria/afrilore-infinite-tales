@@ -27,6 +27,14 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  isTrial: {
+    type: Boolean,
+    default: false,
+  },
+  isSubscribed: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 // Encrypt password before save
