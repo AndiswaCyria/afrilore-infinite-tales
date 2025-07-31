@@ -92,9 +92,19 @@ const Index = () => {
     setTrialPassword("");
   } catch (err: any) {
     console.error("Trial registration error:", err);
+    let errorMessage = "Something went wrong. Please try again.";
+    
+    if (err.code === 'ECONNABORTED') {
+      errorMessage = "Connection timeout. The server might be starting up, please try again in a moment.";
+    } else if (err.message === 'Network Error') {
+      errorMessage = "Network error. Please check your internet connection and try again.";
+    } else if (err.response?.data?.error || err.response?.data?.message) {
+      errorMessage = err.response.data.error || err.response.data.message;
+    }
+    
     toast({
       title: "Error",
-      description: err.response?.data?.error || err.response?.data?.message || "Something went wrong. Please try again.",
+      description: errorMessage,
       variant: "destructive",
     });
   }

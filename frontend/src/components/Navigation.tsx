@@ -107,7 +107,16 @@ const Navigation = () => {
     (e.target as HTMLFormElement).reset();
   } catch (err: any) {
     console.error("Login error:", err);
-    const errorMessage = err.response?.data?.error || err.response?.data?.message || "Invalid email or password.";
+    let errorMessage = "Invalid email or password.";
+    
+    if (err.code === 'ECONNABORTED') {
+      errorMessage = "Connection timeout. The server might be starting up, please try again in a moment.";
+    } else if (err.message === 'Network Error') {
+      errorMessage = "Network error. Please check your internet connection and try again.";
+    } else if (err.response?.data?.error || err.response?.data?.message) {
+      errorMessage = err.response.data.error || err.response.data.message;
+    }
+    
     toast({
       title: "Login Failed",
       description: errorMessage,
@@ -178,7 +187,16 @@ const handleRegister = async (e: React.FormEvent) => {
     (e.target as HTMLFormElement).reset();
   } catch (err: any) {
     console.error("Registration error:", err);
-    const errorMessage = err.response?.data?.error || err.response?.data?.message || "Registration failed. Please check your details.";
+    let errorMessage = "Registration failed. Please check your details.";
+    
+    if (err.code === 'ECONNABORTED') {
+      errorMessage = "Connection timeout. The server might be starting up, please try again in a moment.";
+    } else if (err.message === 'Network Error') {
+      errorMessage = "Network error. Please check your internet connection and try again.";
+    } else if (err.response?.data?.error || err.response?.data?.message) {
+      errorMessage = err.response.data.error || err.response.data.message;
+    }
+    
     toast({
       title: "Registration Failed",
       description: errorMessage,
