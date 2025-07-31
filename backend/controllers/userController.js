@@ -63,6 +63,9 @@ export const loginUser = async (req, res) => {
     console.error("Login error:", error);
     res.status(500).json({ error: "Server error during login" });
   }
+  if (!password || password.trim().length < 6) {
+  return res.status(400).json({ error: "Password must be at least 6 characters" });
+  }
 };
 
 // @route GET /api/user/me
