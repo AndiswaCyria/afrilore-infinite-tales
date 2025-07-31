@@ -33,23 +33,13 @@ const io = new Server(server, {
 // ✅ Middleware
 app.use(morgan("dev"));
 app.use(cors({
-  origin: process.env.CLIENT_URL,
-  credentials: true
+  origin: ["http://localhost:8080", "http://localhost:5173", "https://afrilore-infinite-tales.vercel.app"],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true, 
-  })
-);
 
 
 // ✅ Helper function for bot replies
