@@ -44,6 +44,10 @@ export const loginUser = async (req, res) => {
     if (!email || !password) {
       return res.status(400).json({ error: "Please provide email and password" });
     }
+
+    if (!password || password.trim().length < 6) {
+      return res.status(400).json({ error: "Password must be at least 6 characters" });
+    }
     
     const user = await User.findOne({ email });
 
@@ -62,9 +66,6 @@ export const loginUser = async (req, res) => {
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ error: "Server error during login" });
-  }
-  if (!password || password.trim().length < 6) {
-  return res.status(400).json({ error: "Password must be at least 6 characters" });
   }
 };
 
