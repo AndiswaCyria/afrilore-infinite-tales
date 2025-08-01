@@ -9,21 +9,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import api from "@/lib/api";
-import { useState } from "react";
-
-
 
 const Navigation = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   
-    useEffect(() => {
+  useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       setIsLoggedIn(true);
     }
   }, []);
+  
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -310,7 +308,7 @@ const handleLogout = () => {
                         <Input id="register-email" type="email" placeholder="Enter your email" required />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="register-password">Create Password (min 6 characters)</Label>
+                        <Label htmlFor="register-password">Password (min 6 characters)</Label>
                         <Input id="register-password" type="password" placeholder="Create a password" required minLength={6} />
                       </div>
                       <Button 

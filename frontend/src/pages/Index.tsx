@@ -58,9 +58,14 @@ const Index = () => {
   }
 
   try {
+    // Split name into first and last name for backend compatibility
+    const nameParts = trialName.trim().split(' ');
+    const firstName = nameParts[0] || trialName;
+    const lastName = nameParts.slice(1).join(' ') || 'User';
+    
     const response = await api.post("/users/register", {
-      name: trialName,
-      surname: "Trial User", // Default surname for trial users
+      name: firstName,
+      surname: lastName,
       email: trialEmail,
       password: trialPassword,
     });
@@ -92,6 +97,7 @@ const Index = () => {
     setTrialPassword("");
   } catch (err: any) {
     console.error("Trial registration error:", err);
+    console.error("Error response:", err.response?.data);
     let errorMessage = "Something went wrong. Please try again.";
     
     if (err.code === 'ECONNABORTED') {
@@ -174,7 +180,7 @@ const Index = () => {
                   <Label htmlFor="trial-password">Password</Label>
                   <Input
                       id="trial-password"
-                      type="text"
+                      type="password"
                       placeholder="Enter your password"
                       required
                       value={trialPassword}

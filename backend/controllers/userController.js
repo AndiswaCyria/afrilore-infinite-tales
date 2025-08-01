@@ -13,12 +13,28 @@ export const registerUser = async (req, res) => {
   try {
     const { name, surname, email, password } = req.body;
     
+    console.log("Registration request body:", req.body);
+    
     if (!name || !surname || !email || !password) {
-      return res.status(400).json({ error: "Please fill in all fields." });
+      return res.status(400).json({ 
+        error: "Please fill in all fields.",
+        missing: {
+          name: !name,
+          surname: !surname, 
+          email: !email,
+          password: !password
+        }
+      });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({ error: "Password must be at least 6 characters long." });
     }
 
     const userExists = await User.findOne({ email });
-    if (userExists) return res.status(400).json({ error: "User already exists" });
+    if (userExists) {
+      return res.status(400).json({ error: "User already exists with this email address." });
+    }
 
     const user = await User.create({ name, surname, email, password });
     const token = generateToken(user._id);
@@ -31,6 +47,7 @@ export const registerUser = async (req, res) => {
       token,
     });
   } catch (error) {
+    console.error("Registration error details:", error);
     console.error("Registration error:", error);
     res.status(500).json({ error: "Server error during registration" });
   }
@@ -41,17 +58,21 @@ export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     
+    console.log("Login request body:", { email, password: password ? "***" : "missing" });
+    
     if (!email || !password) {
       return res.status(400).json({ error: "Please provide email and password" });
     }
 
-    if (!password || password.trim().length < 6) {
-      return res.status(400).json({ error: "Password must be at least 6 characters" });
-    }
-    
     const user = await User.findOne({ email });
+    
+    if (!user) {
+      return res.status(401).json({ error: "Invalid email or password" });
+    }
 
-    if (user && (await user.matchPassword(password))) {
+    const isPasswordValid = await user.matchPassword(password);
+    
+    if (isPasswordValid) {
       const token = generateToken(user._id);
       res.json({
         _id: user._id,
@@ -64,6 +85,7 @@ export const loginUser = async (req, res) => {
       res.status(401).json({ error: "Invalid email or password" });
     }
   } catch (error) {
+    console.error("Login error details:", error);
     console.error("Login error:", error);
     res.status(500).json({ error: "Server error during login" });
   }
