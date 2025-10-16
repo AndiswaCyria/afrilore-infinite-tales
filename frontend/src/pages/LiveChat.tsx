@@ -8,7 +8,7 @@ import { toast } from "@/hooks/use-toast";
 import { io, Socket } from "socket.io-client";
 
 const LiveChat = () => {
-  const [messages, setMessages] = useState<{ from: string; text: string }[]>([]);
+  const [messages, setMessages] = useState<{ from: string; text: string; isEscalation?: boolean }[]>([]);
   const [input, setInput] = useState("");
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
@@ -37,6 +37,15 @@ const LiveChat = () => {
 
     newSocket.on("botMessage", (message: { from: string; text: string }) => {
       setMessages((prev) => [...prev, message]);
+    });
+
+    // Listen for escalation notification
+    newSocket.on("escalationNotification", (notification: { text: string; timestamp: Date }) => {
+      setMessages((prev) => [...prev, { from: "System", text: notification.text, isEscalation: true }]);
+      toast({
+        title: "Query Escalated",
+        description: "Your issue has been forwarded to our support team.",
+      });
     });
 
     setSocket(newSocket);
@@ -75,6 +84,8 @@ const LiveChat = () => {
                     className={`max-w-[80%] px-4 py-2 rounded-lg ${
                       msg.from === "User"
                         ? "ml-auto bg-primary text-white"
+                        : msg.isEscalation
+                        ? "mx-auto bg-green-100 text-green-800 border border-green-300 text-center"
                         : "bg-muted text-foreground"
                     }`}
                   >

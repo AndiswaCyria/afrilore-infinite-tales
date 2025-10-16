@@ -12,6 +12,7 @@ import bookRoutes from "./routes/bookRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import ChatMessage from "./models/ChatMessage.js";
 import chatRoutes from "./routes/chatRoutes.js";
+import chatBotService from "./services/chatBotService.js";
 
 dotenv.config();
 connectDB();
@@ -42,23 +43,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-// ✅ Helper function for bot replies
-function getGreetingMessage() {
-  return {
-    text: "Hi! Thank you for reaching out. For support inquiries, please email us at andiswacyriam@gmail.com and we'll get back to you as soon as possible.",
-    from: "Bot",
-    timestamp: new Date()
-  };
-}
-
-function getFollowUpMessage() {
-  return {
-    text: "For further assistance, please contact us at andiswacyriam@gmail.com. We're here to help!",
-    from: "Bot",
-    timestamp: new Date()
-  };
-}
-
 // ✅ Socket.io logic
 io.on("connection", (socket) => {
   console.log(`🔌 User connected: ${socket.id}`);
@@ -80,26 +64,14 @@ io.on("connection", (socket) => {
         from: userMessage.from
       });
 
-      // Check if this is the first user message for this socket
-      const previousMessages = await ChatMessage.find({ 
-        socketId: socket.id,
-        from: "User"
-      }).countDocuments();
-
-      let botReply;
-      if (previousMessages === 1) {
-        // First message - send greeting
-        botReply = getGreetingMessage();
-      } else {
-        // Subsequent messages - send follow-up
-        botReply = getFollowUpMessage();
-      }
+      // Process message through intelligent bot
+      const botResponse = await chatBotService.processMessage(socket.id, messageText);
 
       const botMessage = new ChatMessage({
-        text: botReply.text,
-        from: botReply.from,
+        text: botResponse.text,
+        from: "Bot",
         socketId: socket.id,
-        timestamp: botReply.timestamp
+        timestamp: new Date()
       });
 
       await botMessage.save();
@@ -111,6 +83,16 @@ io.on("connection", (socket) => {
         from: botMessage.from
       });
 
+      // If escalated, send escalation notification
+      if (botResponse.shouldEscalate) {
+        setTimeout(() => {
+          socket.emit("escalationNotification", {
+            text: "✅ Your query has been escalated to our support team. They will contact you shortly.",
+            timestamp: new Date()
+          });
+        }, 1000);
+      }
+
     } catch (error) {
       console.error("❌ Error handling chat message:", error.message);
     }
@@ -118,6 +100,7 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log(`❌ User disconnected: ${socket.id}`);
+    chatBotService.clearConversation(socket.id);
   });
 });
 
