@@ -14,10 +14,10 @@ const LiveChat = () => {
   const [isConnected, setIsConnected] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Connect to socket and fetch messages
+  // Connect to socket - no historical messages
   useEffect(() => {
     const newSocket = io("https://afrilore-infinite-tales.onrender.com");
-    
+
     newSocket.on("connect", () => {
       setIsConnected(true);
       toast({
@@ -40,18 +40,6 @@ const LiveChat = () => {
     });
 
     setSocket(newSocket);
-
-    // Fetch initial messages
-    fetch("https://afrilore-infinite-tales.onrender.com/api/chat")
-      .then(res => res.json())
-      .then(data => setMessages(data))
-      .catch(() => {
-        toast({
-          title: "Error loading chat",
-          description: "Could not load chat history.",
-          variant: "destructive",
-        });
-      });
 
     return () => newSocket.close();
   }, []);

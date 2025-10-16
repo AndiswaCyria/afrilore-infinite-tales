@@ -45,7 +45,7 @@ app.use(express.urlencoded({ extended: true }));
 // ✅ Helper function for bot replies
 function getGreetingMessage() {
   return {
-    text: "Hi! Thank you for reaching out. How can we help you today?",
+    text: "Hi! Thank you for reaching out. For support inquiries, please email us at andiswacyriam@gmail.com and we'll get back to you as soon as possible.",
     from: "Bot",
     timestamp: new Date()
   };
@@ -53,7 +53,7 @@ function getGreetingMessage() {
 
 function getFollowUpMessage() {
   return {
-    text: "Thanks! A support agent will join shortly.",
+    text: "For further assistance, please contact us at andiswacyriam@gmail.com. We're here to help!",
     from: "Bot",
     timestamp: new Date()
   };
