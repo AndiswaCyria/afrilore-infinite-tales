@@ -85,7 +85,7 @@ const LiveChat = () => {
                   <div
                     key={index}
                     className={`max-w-[80%] px-4 py-2 rounded-lg ${
-                      msg.from === "user"
+                      msg.from === "User"
                         ? "ml-auto bg-primary text-white"
                         : "bg-muted text-foreground"
                     }`}
